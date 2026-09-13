@@ -1,0 +1,234 @@
+{
+  "entities": {
+    "Admin": {
+      "title": "Admin",
+      "description": "Administrator account authorized to manage the platform",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "email": { "type": "string", "format": "email", "maxLength": 150 },
+        "role": { "type": "string", "enum": ["superadmin", "admin", "editor"], "maxLength": 30 },
+        "name": { "type": "string", "maxLength": 100 },
+        "createdAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["id", "email", "role"]
+    },
+    "News": {
+      "title": "News",
+      "description": "Official village news articles and announcements",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "maxLength": 200 },
+        "category": { "type": "string", "maxLength": 50 },
+        "summary": { "type": "string", "maxLength": 500 },
+        "content": { "type": "string", "maxLength": 10000 },
+        "publishedAt": { "type": "string", "maxLength": 50 },
+        "authorName": { "type": "string", "maxLength": 100 },
+        "authorRole": { "type": "string", "maxLength": 100 },
+        "isPinned": { "type": "boolean" },
+        "imageUrl": { "type": "string", "maxLength": 1000 },
+        "createdAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["title", "summary", "content"]
+    },
+    "Meeting": {
+      "title": "Meeting",
+      "description": "Scheduled village and association assemblies",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "maxLength": 200 },
+        "date": { "type": "string", "maxLength": 50 },
+        "time": { "type": "string", "maxLength": 50 },
+        "location": { "type": "string", "maxLength": 200 },
+        "organizerName": { "type": "string", "maxLength": 100 },
+        "organizerRole": { "type": "string", "maxLength": 100 },
+        "targetAudience": { "type": "string", "maxLength": 100 },
+        "agenda": { "type": "string", "maxLength": 5000 },
+        "status": { "type": "string", "enum": ["upcoming", "completed", "cancelled"], "maxLength": 30 },
+        "createdAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["title", "date", "location"]
+    },
+    "HomeVideo": {
+      "title": "HomeVideo",
+      "description": "Curated videos spotlighting village life and projects",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "maxLength": 200 },
+        "description": { "type": "string", "maxLength": 1000 },
+        "videoUrl": { "type": "string", "maxLength": 1000 },
+        "publishedAt": { "type": "string", "maxLength": 50 },
+        "isActive": { "type": "boolean" },
+        "createdAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["title", "videoUrl"]
+    },
+    "CustomSection": {
+      "title": "CustomSection",
+      "description": "Thematic dossiers and dedicated project pages",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "slug": { "type": "string", "maxLength": 100 },
+        "title": { "type": "string", "maxLength": 200 },
+        "subtitle": { "type": "string", "maxLength": 300 },
+        "content": { "type": "string", "maxLength": 15000 },
+        "category": { "type": "string", "maxLength": 100 },
+        "imageUrl": { "type": "string", "maxLength": 1000 },
+        "buttonText": { "type": "string", "maxLength": 100 },
+        "buttonUrl": { "type": "string", "maxLength": 1000 },
+        "isPublished": { "type": "boolean" },
+        "order": { "type": "number" },
+        "createdAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["slug", "title", "content"]
+    },
+    "DonationButton": {
+      "title": "DonationButton",
+      "description": "Verified donation links and mobile money contribution configs",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "label": { "type": "string", "maxLength": 150 },
+        "url": { "type": "string", "maxLength": 1000 },
+        "description": { "type": "string", "maxLength": 500 },
+        "badge": { "type": "string", "maxLength": 100 },
+        "platformName": { "type": "string", "maxLength": 100 },
+        "iconType": { "type": "string", "maxLength": 50 },
+        "isActive": { "type": "boolean" },
+        "isPrimary": { "type": "boolean" },
+        "order": { "type": "number" },
+        "createdAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["label", "url", "platformName"]
+    },
+    "GalleryPhoto": {
+      "title": "GalleryPhoto",
+      "description": "Official photo gallery capturing achievements and village milestones",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "maxLength": 200 },
+        "description": { "type": "string", "maxLength": 500 },
+        "category": { "type": "string", "maxLength": 100 },
+        "imageUrl": { "type": "string", "maxLength": 1000 },
+        "date": { "type": "string", "maxLength": 50 },
+        "createdAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["title", "imageUrl"]
+    },
+    "DocumentResource": {
+      "title": "DocumentResource",
+      "description": "Official downloadable partnership documents, reports and statutes",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "maxLength": 200 },
+        "description": { "type": "string", "maxLength": 500 },
+        "category": { "type": "string", "maxLength": 100 },
+        "fileUrl": { "type": "string", "maxLength": 1000 },
+        "format": { "type": "string", "maxLength": 20 },
+        "fileSize": { "type": "string", "maxLength": 50 },
+        "publishedAt": { "type": "string", "maxLength": 50 },
+        "createdAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["title", "fileUrl"]
+    },
+    "FooterConfig": {
+      "title": "FooterConfig",
+      "description": "Footer contact information and social/quick links",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "email": { "type": "string", "maxLength": 150 },
+        "phone": { "type": "string", "maxLength": 100 },
+        "address": { "type": "string", "maxLength": 200 },
+        "description": { "type": "string", "maxLength": 500 },
+        "whatsapp": { "type": "string", "maxLength": 200 },
+        "facebook": { "type": "string", "maxLength": 200 },
+        "youtube": { "type": "string", "maxLength": 200 },
+        "copyrightText": { "type": "string", "maxLength": 200 },
+        "updatedAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["email", "phone"]
+    },
+    "ContactMessage": {
+      "title": "ContactMessage",
+      "description": "Direct message received from partners or villagers",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 100 },
+        "contact": { "type": "string", "maxLength": 150 },
+        "email": { "type": "string", "maxLength": 150 },
+        "phone": { "type": "string", "maxLength": 50 },
+        "organization": { "type": "string", "maxLength": 150 },
+        "subject": { "type": "string", "maxLength": 200 },
+        "message": { "type": "string", "maxLength": 5000 },
+        "status": { "type": "string", "enum": ["new", "read", "replied"], "maxLength": 30 },
+        "createdAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["name", "contact", "message"]
+    },
+    "NewsletterSubscriber": {
+      "title": "NewsletterSubscriber",
+      "description": "Partner or community member subscribed to news alerts",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "email": { "type": "string", "format": "email", "maxLength": 150 },
+        "subscribedAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["email"]
+    }
+  },
+  "firestore": {
+    "/admins/{adminId}": {
+      "schema": "Admin",
+      "description": "Registered administrators"
+    },
+    "/news/{newsId}": {
+      "schema": "News",
+      "description": "Published news articles"
+    },
+    "/meetings/{meetingId}": {
+      "schema": "Meeting",
+      "description": "General assemblies and scheduled meetings"
+    },
+    "/videos/{videoId}": {
+      "schema": "HomeVideo",
+      "description": "Homepage video carousel and embeds"
+    },
+    "/customSections/{sectionId}": {
+      "schema": "CustomSection",
+      "description": "Dynamic dossiers and customized thematic sections"
+    },
+    "/donationButtons/{buttonId}": {
+      "schema": "DonationButton",
+      "description": "Donation and mobile money external links configuration"
+    },
+    "/photos/{photoId}": {
+      "schema": "GalleryPhoto",
+      "description": "Photo gallery records"
+    },
+    "/documents/{documentId}": {
+      "schema": "DocumentResource",
+      "description": "Downloadable partner documents and reports"
+    },
+    "/siteConfig/{configId}": {
+      "schema": "FooterConfig",
+      "description": "Site-wide customizable footer and layout information"
+    },
+    "/contactMessages/{messageId}": {
+      "schema": "ContactMessage",
+      "description": "Direct inquiries from visitors and partners"
+    },
+    "/subscribers/{subscriberId}": {
+      "schema": "NewsletterSubscriber",
+      "description": "Subscriber emails for updates and notifications"
+    }
+  }
+}

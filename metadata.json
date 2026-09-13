@@ -1,0 +1,6 @@
+{
+  "name": "Formulaire de Contact",
+  "description": "Plateforme officielle de l'ADMDO (Médina Diakha Wouly) avec navigation page par page partageable, base Firestore en temps réel, gestion des vidéos, réunions, projets, cagnottes solidaires et espace administrateur renforcé.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

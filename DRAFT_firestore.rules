@@ -1,0 +1,183 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default-deny catch-all (Pillar 4: Global Safety Net)
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Common Primitives
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerified() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    // The primary and ultimate administrator specified by user
+    function isSuperAdmin() {
+      return isVerified() && request.auth.token.email == 'admdo.association@gmail.com';
+    }
+
+    // Admin authorization lookup in trusted database document or superadmin
+    function isAdmin() {
+      return isSuperAdmin() || (isVerified() && exists(/databases/$(database)/documents/admins/$(request.auth.uid)));
+    }
+
+    // Entity Validations
+    function isValidAdmin(data) {
+      return data.email is string && data.email.size() <= 150 &&
+             data.role in ['superadmin', 'admin', 'editor'];
+    }
+
+    function isValidNews(data) {
+      return data.title is string && data.title.size() > 0 && data.title.size() <= 200 &&
+             data.summary is string && data.summary.size() <= 500 &&
+             data.content is string && data.content.size() <= 10000;
+    }
+
+    function isValidMeeting(data) {
+      return data.title is string && data.title.size() > 0 && data.title.size() <= 200 &&
+             data.date is string && data.date.size() <= 50 &&
+             data.location is string && data.location.size() <= 200;
+    }
+
+    function isValidVideo(data) {
+      return data.title is string && data.title.size() > 0 && data.title.size() <= 200 &&
+             data.videoUrl is string && data.videoUrl.size() <= 1000;
+    }
+
+    function isValidSection(data) {
+      return data.slug is string && data.slug.size() > 0 && data.slug.size() <= 100 &&
+             data.title is string && data.title.size() <= 200 &&
+             data.content is string && data.content.size() <= 15000;
+    }
+
+    function isValidDonationButton(data) {
+      return data.label is string && data.label.size() > 0 && data.label.size() <= 150 &&
+             data.url is string && data.url.size() <= 1000 &&
+             data.platformName is string && data.platformName.size() <= 100;
+    }
+
+    function isValidPhoto(data) {
+      return data.title is string && data.title.size() > 0 && data.title.size() <= 200 &&
+             data.imageUrl is string && data.imageUrl.size() <= 1000;
+    }
+
+    function isValidDocument(data) {
+      return data.title is string && data.title.size() > 0 && data.title.size() <= 200 &&
+             data.fileUrl is string && data.fileUrl.size() <= 1000;
+    }
+
+    function isValidSiteConfig(data) {
+      return data.email is string && data.email.size() <= 150 &&
+             data.phone is string && data.phone.size() <= 100;
+    }
+
+    function isValidContactMessage(data) {
+      return data.name is string && data.name.size() > 0 && data.name.size() <= 100 &&
+             data.contact is string && data.contact.size() > 0 && data.contact.size() <= 150 &&
+             data.message is string && data.message.size() > 0 && data.message.size() <= 5000;
+    }
+
+    // 1. Admins collection
+    match /admins/{adminId} {
+      allow get: if isVerified() && (request.auth.uid == adminId || isAdmin());
+      allow list: if isAdmin();
+      allow create, update: if isSuperAdmin() && isValidId(adminId) && isValidAdmin(incoming());
+      allow delete: if isSuperAdmin() && isValidId(adminId) && request.auth.uid != adminId;
+    }
+
+    // 2. News collection
+    match /news/{newsId} {
+      allow read: if true;
+      allow create: if isAdmin() && isValidId(newsId) && isValidNews(incoming());
+      allow update: if isAdmin() && isValidId(newsId) && isValidNews(incoming());
+      allow delete: if isAdmin() && isValidId(newsId);
+    }
+
+    // 3. Meetings collection
+    match /meetings/{meetingId} {
+      allow read: if true;
+      allow create: if isAdmin() && isValidId(meetingId) && isValidMeeting(incoming());
+      allow update: if isAdmin() && isValidId(meetingId) && isValidMeeting(incoming());
+      allow delete: if isAdmin() && isValidId(meetingId);
+    }
+
+    // 4. Videos collection
+    match /videos/{videoId} {
+      allow read: if true;
+      allow create: if isAdmin() && isValidId(videoId) && isValidVideo(incoming());
+      allow update: if isAdmin() && isValidId(videoId) && isValidVideo(incoming());
+      allow delete: if isAdmin() && isValidId(videoId);
+    }
+
+    // 5. Custom Sections collection
+    match /customSections/{sectionId} {
+      allow read: if true;
+      allow create: if isAdmin() && isValidId(sectionId) && isValidSection(incoming());
+      allow update: if isAdmin() && isValidId(sectionId) && isValidSection(incoming());
+      allow delete: if isAdmin() && isValidId(sectionId);
+    }
+
+    // 6. Donation Buttons collection
+    match /donationButtons/{buttonId} {
+      allow read: if true;
+      allow create: if isAdmin() && isValidId(buttonId) && isValidDonationButton(incoming());
+      allow update: if isAdmin() && isValidId(buttonId) && isValidDonationButton(incoming());
+      allow delete: if isAdmin() && isValidId(buttonId);
+    }
+
+    // 7. Photos collection
+    match /photos/{photoId} {
+      allow read: if true;
+      allow create: if isAdmin() && isValidId(photoId) && isValidPhoto(incoming());
+      allow update: if isAdmin() && isValidId(photoId) && isValidPhoto(incoming());
+      allow delete: if isAdmin() && isValidId(photoId);
+    }
+
+    // 8. Documents collection (downloadable reports & partner files)
+    match /documents/{documentId} {
+      allow read: if true;
+      allow create: if isAdmin() && isValidId(documentId) && isValidDocument(incoming());
+      allow update: if isAdmin() && isValidId(documentId) && isValidDocument(incoming());
+      allow delete: if isAdmin() && isValidId(documentId);
+    }
+
+    // 9. Site Config (Footer, contacts, etc.)
+    match /siteConfig/{configId} {
+      allow read: if true;
+      allow create, update: if isAdmin() && isValidId(configId) && isValidSiteConfig(incoming());
+      allow delete: if isSuperAdmin() && isValidId(configId);
+    }
+
+    // 10. Contact Messages (Public write, Admin read/management)
+    match /contactMessages/{messageId} {
+      allow read, list, delete: if isAdmin();
+      allow create: if isValidId(messageId) && isValidContactMessage(incoming());
+      allow update: if isAdmin() && isValidId(messageId);
+    }
+
+    // 11. Newsletter Subscribers (Public create, Admin read)
+    match /subscribers/{subscriberId} {
+      allow read, list, delete: if isAdmin();
+      allow create: if isValidId(subscriberId) && incoming().email is string &&
+                    incoming().email.size() > 3 && incoming().email.size() <= 150;
+      allow update: if isAdmin() && isValidId(subscriberId);
+    }
+  }
+}

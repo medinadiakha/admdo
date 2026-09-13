@@ -18,12 +18,12 @@ interface CustomSectionsDirectoryProps {
 }
 
 export const CustomSectionsDirectory: React.FC<CustomSectionsDirectoryProps> = ({
-  sections,
+  sections = [],
   onSelectSection,
   onNavigateDonations,
   onNavigateContact,
 }) => {
-  const publishedSections = sections
+  const publishedSections = (sections || [])
     .filter((s) => s.isPublished)
     .sort((a, b) => a.order - b.order);
 

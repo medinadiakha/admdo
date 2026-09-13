@@ -101,7 +101,7 @@ export const DriveInbox: React.FC<DriveInboxProps> = ({ auth, onLoginRequired })
     }
   };
 
-  const filteredFiles = files.filter((f) =>
+  const filteredFiles = (files || []).filter((f) =>
     f.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     (f.description && f.description.toLowerCase().includes(searchQuery.toLowerCase()))
   );

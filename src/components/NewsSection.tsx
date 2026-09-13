@@ -7,7 +7,7 @@ interface NewsSectionProps {
   onOpenAdmin: () => void;
 }
 
-export const NewsSection: React.FC<NewsSectionProps> = ({ newsList, onOpenAdmin }) => {
+export const NewsSection: React.FC<NewsSectionProps> = ({ newsList = [], onOpenAdmin }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('Tous');
   const [selectedArticle, setSelectedArticle] = useState<NewsArticle | null>(null);
 
@@ -15,8 +15,8 @@ export const NewsSection: React.FC<NewsSectionProps> = ({ newsList, onOpenAdmin 
 
   const filteredNews =
     selectedCategory === 'Tous'
-      ? newsList
-      : newsList.filter((n) => n.category === selectedCategory);
+      ? (newsList || [])
+      : (newsList || []).filter((n) => n.category === selectedCategory);
 
   return (
     <section id="actualites" className="py-12 sm:py-16 bg-slate-50 border-b border-slate-200">

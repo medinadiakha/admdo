@@ -23,7 +23,7 @@ interface DocumentsPageProps {
 }
 
 export const DocumentsPage: React.FC<DocumentsPageProps> = ({
-  documents,
+  documents = [],
   onNavigateToContact,
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');

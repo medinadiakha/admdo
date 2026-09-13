@@ -14,7 +14,7 @@ interface GalleryPageProps {
   photos: GalleryPhoto[];
 }
 
-export const GalleryPage: React.FC<GalleryPageProps> = ({ photos }) => {
+export const GalleryPage: React.FC<GalleryPageProps> = ({ photos = [] }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('Tous');
   const [previewPhoto, setPreviewPhoto] = useState<GalleryPhoto | null>(null);
 
@@ -22,8 +22,8 @@ export const GalleryPage: React.FC<GalleryPageProps> = ({ photos }) => {
 
   const filteredPhotos =
     selectedCategory === 'Tous'
-      ? photos
-      : photos.filter((p) => p.category === selectedCategory);
+      ? (photos || [])
+      : (photos || []).filter((p) => p.category === selectedCategory);
 
   return (
     <div className="py-12 bg-slate-50 min-h-screen">

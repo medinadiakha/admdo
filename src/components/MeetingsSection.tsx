@@ -7,15 +7,15 @@ interface MeetingsSectionProps {
   onOpenAdmin: () => void;
 }
 
-export const MeetingsSection: React.FC<MeetingsSectionProps> = ({ meetingsList, onOpenAdmin }) => {
-  const [expandedId, setExpandedId] = useState<string | null>(meetingsList[0]?.id || null);
+export const MeetingsSection: React.FC<MeetingsSectionProps> = ({ meetingsList = [], onOpenAdmin }) => {
+  const [expandedId, setExpandedId] = useState<string | null>(meetingsList?.[0]?.id || null);
 
   const toggleExpand = (id: string) => {
     setExpandedId((prev) => (prev === id ? null : id));
   };
 
-  const upcomingMeetings = meetingsList.filter((m) => m.status === 'upcoming');
-  const pastMeetings = meetingsList.filter((m) => m.status === 'completed');
+  const upcomingMeetings = (meetingsList || []).filter((m) => m.status === 'upcoming');
+  const pastMeetings = (meetingsList || []).filter((m) => m.status === 'completed');
 
   return (
     <section id="reunions" className="py-12 sm:py-16 bg-white border-b border-slate-200">

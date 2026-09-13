@@ -20,10 +20,10 @@ interface DonationsPageProps {
 }
 
 export const DonationsPage: React.FC<DonationsPageProps> = ({
-  donationButtons,
+  donationButtons = [],
   onNavigateContact,
 }) => {
-  const activeButtons = donationButtons.filter((b) => b.isActive);
+  const activeButtons = (donationButtons || []).filter((b) => b.isActive);
   const [copiedAccount, setCopiedAccount] = useState<string | null>(null);
 
   const getIcon = (type?: string) => {

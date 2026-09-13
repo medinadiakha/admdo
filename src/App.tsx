@@ -1182,7 +1182,10 @@ export default function App() {
       {/* PAGE 9: DOCUMENTS & STATUTS OFFICIELS POUR PARTENAIRES */}
       {currentView === 'documents' && (
         <main className="flex-1">
-          <DocumentsPage onNavigateBack={() => navigateTo('accueil')} />
+          <DocumentsPage
+            documents={documents}
+            onNavigateToContact={() => navigateTo('contact')}
+          />
         </main>
       )}
 

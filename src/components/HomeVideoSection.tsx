@@ -8,8 +8,8 @@ interface HomeVideoSectionProps {
   videos: HomeVideo[];
 }
 
-export const HomeVideoSection: React.FC<HomeVideoSectionProps> = ({ videos }) => {
-  const activeVideos = videos.filter((v) => v.isActive);
+export const HomeVideoSection: React.FC<HomeVideoSectionProps> = ({ videos = [] }) => {
+  const activeVideos = (videos || []).filter((v) => v.isActive);
 
   if (activeVideos.length === 0) return null;
 
